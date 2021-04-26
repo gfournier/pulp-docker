@@ -10,12 +10,12 @@ A Docker image for Ubuntu is available and maintained by COIN-OR [here](https://
 Pull image from [Docker Hub](https://hub.docker.com/r/gfournier/pulp/tags).
 
 ```
-docker pull pulp:3.8-alpine
+docker pull gfournier/pulp:3.8-alpine
 ```
 
 Then start a container on this image.
 ```
-docker run -it pulp:3.8-alpine
+docker run -it gfournier/pulp:3.8-alpine /bin/sh
 ```
 
 And run the pulp test suite which should pass.
