@@ -7,7 +7,7 @@ A Docker image for Ubuntu is available and maintained by COIN-OR [here](https://
 
 ## Install and use from Docker Hub
 
-Pull image from Docker Hub.
+Pull image from [Docker Hub](https://hub.docker.com/r/gfournier/pulp/tags).
 
 ```
 docker pull pulp:3.8-alpine
