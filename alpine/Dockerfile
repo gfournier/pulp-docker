@@ -3,6 +3,8 @@ MAINTAINER Guillaume Fournier <fournierg@gmail.com>
 
 ENV CBC_VERSION 2.10.5
 
+ENV PATH="/dist/bin:${PATH}"
+
 RUN apk add --no-cache --virtual .build-deps \
       bash \
       git \
@@ -17,21 +19,18 @@ RUN apk add --no-cache --virtual .build-deps \
   && wget https://raw.githubusercontent.com/coin-or/coinbrew/master/coinbrew \
   && chmod u+x coinbrew \
   && ./coinbrew fetch "Cbc@releases/$CBC_VERSION" \
-  && ./coinbrew build Cbc FFLAGS=-fallow-argument-mismatch -n -b ./build -p /usr/local \
-#  && cd / \
+  && ./coinbrew build Cbc FFLAGS=-fallow-argument-mismatch --no-prompt --tests none --verbosity 3 --build-dir ./build --prefix /dist \
+  && cd / \
   && apk del --no-network .build-deps \
+  && rm -rf ./build_dir \
   && apk add --no-cache \
-      libblas \
-      liblapack \
+      lapack \
+      openblas \
+      libgfortran \
       libstdc++ \
-      libgfortran
-#  && rm -rf ./build_dir
-
-# Install pulp package and replace default cbc binary since it's not valid in alpine
-RUN pip install pulp \
+  && pip install pulp \
   && rm /usr/local/lib/python3.8/site-packages/pulp/solverdir/cbc/linux/64/cbc \
-  && ln -s /usr/local/bin/cbc /usr/local/lib/python3.8/site-packages/pulp/solverdir/cbc/linux/64/cbc
-
-# ENV PATH="/dist/bin:${PATH}"
+  && ln -s /dist/bin/cbc /usr/local/lib/python3.8/site-packages/pulp/solverdir/cbc/linux/64/cbc \
+  && pulptest
 
 CMD ["/bin/sh"]
